@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A zero-install CoinGecko API scanner that compares market momentum, attention and profitable-wallet movement.">
+  <title>Attention Gap — Market + Smart Money Scanner</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%2306090d'/%3E%3Cpath d='M13 48 28 33l9 8 14-24' fill='none' stroke='%237dffb2' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='51' cy='17' r='5' fill='%23ffcb6b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><div class="mark">AG</div><div><p class="eyebrow">Powered by CoinGecko API</p><h1>Attention Gap</h1></div></div>
+      <div class="status" id="apiStatus"><span></span> Ready</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">THE MARKET DOESN’T WAIT FOR THE TIMELINE.</p>
+        <h2>Do price, attention<br>and <em>smart money</em> agree?</h2>
+        <p>Scan 250 liquid assets, then inspect the strongest contract-backed signals with profitable-wallet activity from the last 24 hours. Specific tokens. A falsifiable call.</p>
+      </div>
+      <div class="control-card">
+        <div class="plan-line"><label for="apiPlan">API plan</label><select id="apiPlan"><option value="pro" selected>Pro / Analyst</option><option value="demo">Demo</option></select></div>
+        <div class="plan-line"><label for="walletDepth">Wallet depth</label><select id="walletDepth"><option value="12" selected>Top 12 · recommended</option><option value="25">Top 25</option><option value="all">All actionable assets</option></select></div>
+        <label for="apiKey">CoinGecko API key <span>session only</span></label>
+        <div class="key-input"><input id="apiKey" type="password" autocomplete="off" placeholder="CG-…"><button id="toggleKey" type="button">Show</button></div>
+        <small id="keyHelp">Sent only to pro-api.coingecko.com. Never stored.</small>
+        <button class="primary" id="runButton" type="button">Run market + wallet scan</button>
+      </div>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <div class="empty-map"><i></i><i></i><b></b><span>market confirmation →</span><em>attention →</em></div>
+      <div><h2>Most tools show what moved.<br>This one checks who is behind it.</h2><p>Enter an Analyst key to generate the live attention-market map and profitable-wallet overlay.</p></div>
+    </section>
+
+    <section id="results" class="results" hidden aria-live="polite">
+      <div class="stat-grid">
+        <article><span>LIQUID UNIVERSE</span><strong id="universeCount">—</strong></article>
+        <article class="blue"><span>MARKET LEADS</span><strong id="earlyCount">—</strong></article>
+        <article class="green"><span>CONFIRMED</span><strong id="confirmedCount">—</strong></article>
+        <article class="red"><span>ATTENTION TRAPS</span><strong id="trapCount">—</strong></article>
+        <article class="amber"><span>WALLET-ENRICHED</span><strong id="smartCount">—</strong></article>
+        <article class="amber"><span>SMART FLOW LEAD</span><strong id="smartLead">—</strong></article>
+      </div>
+
+      <section class="map-section">
+        <div class="section-head"><div><p class="eyebrow">THE DISAGREEMENT MAP</p><h2>Market confirmation vs. attention</h2></div><p id="timestamp"></p></div>
+        <div class="map" id="signalMap">
+          <div class="quadrant q-trap"><b>ATTENTION TRAP</b><span>watched, not confirmed</span></div>
+          <div class="quadrant q-confirmed"><b>CONFIRMED</b><span>attention + market agree</span></div>
+          <div class="quadrant q-dead"><b>NO EDGE</b><span>nothing to argue yet</span></div>
+          <div class="quadrant q-early"><b>MARKET LEADS</b><span>activity before attention</span></div>
+          <div class="axis x">MARKET CONFIRMATION →</div><div class="axis y">ATTENTION →</div>
+          <div id="mapDots"></div>
+        </div>
+      </section>
+
+      <section class="calls-section">
+        <div class="section-head"><div><p class="eyebrow">TODAY’S CALLS</p><h2>Where do market, attention and wallets disagree?</h2></div><button id="copyButton" disabled>Copy share summary</button></div>
+        <div class="calls" id="calls"></div>
+      </section>
+
+      <section class="wallet-section">
+        <div class="section-head"><div><p class="eyebrow">SMART MONEY BOARD</p><h2>Profitable-wallet activity, asset by asset</h2></div><p>24H trade window · user-selected scan depth</p></div>
+        <div class="wallet-board" id="walletBoard"></div>
+      </section>
+
+      <section class="verdict"><p class="eyebrow">MY READ</p><p id="verdict"></p></section>
+    </section>
+
+    <section id="errorBox" class="error-box" hidden role="alert"></section>
+    <footer><p>Attention uses CoinGecko trending rank—not direct X data. “Smart money” means wallets with positive realized PnL and at least five historical trades that also traded the asset in the sampled 24H window. It is a research filter, not a buy signal.</p><div><a href="https://www.coingecko.com/en/api" target="_blank" rel="noreferrer">Get API access</a><a href="https://docs.coingecko.com/" target="_blank" rel="noreferrer">Docs</a></div></footer>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
